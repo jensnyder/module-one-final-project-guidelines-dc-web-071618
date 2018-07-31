@@ -1,4 +1,5 @@
 class Player < ActiveRecord::Base
-  has_one :position
-  has_one :team, through: :position
+  belongs_to :team
+  has_one :division, through: :team
+  enum position_id: [:qb, :rb, :wr, :te, :k]
 end

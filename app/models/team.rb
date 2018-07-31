@@ -1,4 +1,4 @@
 class Team < ActiveRecord::Base
-  has_many :positions
-  has_many :players, through: :positions
+  belongs_to :division
+  has_many :players
 end

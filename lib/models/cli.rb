@@ -67,15 +67,17 @@ class CommandLineInterface
   end
 
   def show_teams(teams)
-    teams.each do |team|
-      puts team.name
+    team_names = teams.map do |team|
+      team.name
     end
+    puts "The teams in this division are: #{team_names}"
   end
 
   def show_players(players)
-    players.each do |player|
-      puts player.name
+    player_names = players.map do |player|
+      player.name
     end
+    puts "The players on this team are: #{player_names}"
   end
 
 end

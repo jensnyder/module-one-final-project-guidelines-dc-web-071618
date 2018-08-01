@@ -3,6 +3,7 @@ Bundler.require
 require 'JSON'
 require_all 'lib'
 require 'pry'
+require 'rest-client'
 
 #create divisions from divisions array
 divisions = ["AFC", "NFC"]
@@ -47,7 +48,7 @@ all_teams = {
   WAS: {name: "Redskins", city: "Washington", division_id: 2}}
 
 all_teams.each do |team_id, team_info|
-  Team.create(id: team_id, name: team_info[:name], city: team_info[:city], division_id: team_info[:division_id])
+  Team.create(team_id: team_id, name: team_info[:name], city: team_info[:city], division_id: team_info[:division_id])
 end
 
 
@@ -59,4 +60,16 @@ players.each do |position, position_players|
   position_players.each do |player|
     Player.create(name: player["full_name"], position_id: player["position"], number: player["number"], team_id: player["team"])
   end
+end
+
+#pulls from API
+teams_from_api = RestClient.get('https://19e0f054-13f7-4ebd-8d04-5dc69f:MYSPORTSFEEDS@api.mysportsfeeds.com/v2.0/pull/nfl/2017-regular/team_stats_totals.json/')
+teams_from_api_parsed = JSON.parse(teams_from_api)
+
+#teamStatsTotals array of everything
+teamStatsTotals_array = teams_from_api_parsed["teamStatsTotals"]
+
+#create teamstat object
+teamStatsTotals_array.each do |t|
+  Teamstat.create(team_id: t["team"]["abbreviation"], team_wins: t["stats"]["standings"]["Wins"], team_losses: t["stats"]["standings"]["Losses"])
 end

@@ -19,9 +19,9 @@ class Team < ActiveRecord::Base
     puts "\nThe teams in this division are: #{team_names*", "}".cyan
   end
 
-  # def find_players
-  #   self.players
-  # end
+  def find_players
+    self.players
+  end
 
   def show_players
     player_names = self.find_players

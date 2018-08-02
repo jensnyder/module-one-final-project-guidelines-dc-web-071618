@@ -23,4 +23,11 @@ class Division < ActiveRecord::Base
     puts "\nThe #{team_max.name}".blue
   end
 
+  def get_min_team_name_of_division(string)
+    ts = get_ordered_teamstats_of_division(string)[0]
+    id = ts.team_id
+    team_min = Team.find(id)
+    puts "\nThe #{team_min.name}".blue
+  end
+
 end

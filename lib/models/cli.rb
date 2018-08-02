@@ -56,23 +56,51 @@ class CommandLineInterface
 
   #show stats given division name
   def show_stats_from_division_name(division)
-    stat_selection = gets_user_input("\nWhich division stats would you like to see? Team in the #{division.name} with the:\n (1) most wins\n (2) most losses\n (3) most touchdowns\n (4) most passing yards\n (5) most rushing yards\n (6) most receptions\n (7) most interceptions\n (8) return to main menu")
+    stat_selection = gets_user_input("\nWhich division stats would you like to see? Team in the #{division.name} with the:\n (1) most wins\n (2) most losses\n (3) most touchdowns\n (4) most passing yards\n (5) most rushing yards\n (6) most receptions\n (7) most interceptions\n (8) fewest wins\n (9) fewest losses\n (10) fewest touchdowns\n (11) fewest passing yards\n (12) fewest rushing yards\n (13) fewest receptions\n (14) fewest interceptions\n (15) return to main menu")
     case stat_selection
     when "1"
+      puts "\nmost wins: ".blue
       puts division.get_max_team_name_of_division("team_wins")
     when "2"
+      puts "\nmost losses: ".blue
       puts division.get_max_team_name_of_division("team_losses")
     when "3"
+      puts "\nmost touchdowns: ".blue
       puts division.get_max_team_name_of_division("totaltd")
     when "4"
+      puts "\nmost passing yards: ".blue
       puts division.get_max_team_name_of_division("passnetyards")
     when "5"
+      puts "\nmost rushing yards: ".blue
       puts division.get_max_team_name_of_division("rushyards")
     when "6"
+      puts "\nmost receptions: ".blue
       puts division.get_max_team_name_of_division("receptions")
     when "7"
+      puts "\nmost interceptions: ".blue
       puts division.get_max_team_name_of_division("interceptions")
     when "8"
+      puts "\nfewest wins: ".blue
+      puts division.get_min_team_name_of_division("team_wins")
+    when "9"
+      puts "\nfewest losses: ".blue
+      puts division.get_min_team_name_of_division("team_losses")
+    when "10"
+      puts "\nfewest touchdowns: ".blue
+      puts division.get_min_team_name_of_division("totaltd")
+    when "11"
+      puts "\nfewest passing yards: ".blue
+      puts division.get_min_team_name_of_division("passnetyards")
+    when "12"
+      puts "\nfewest rushing yards: ".blue
+      puts division.get_min_team_name_of_division("rushyards")
+    when "13"
+      puts "\nfewest receptions: ".blue
+      puts division.get_min_team_name_of_division("receptions")
+    when "14"
+      puts "\nfewest interceptions: ".blue
+      puts division.get_min_team_name_of_division("interceptions")
+    when "15"
       run
     else
       puts "Bad input!".red
@@ -146,42 +174,61 @@ class CommandLineInterface
     ")
     case input
     when "1"
+      puts "\nmost wins: ".blue
       Teamstat.get_max("team_wins")
     when "2"
+      puts "\nfewest wins: ".blue
       Teamstat.get_min("team_wins")
     when "3"
+      puts "\nmost losses: ".blue
       Teamstat.get_max("team_losses")
     when "4"
+      puts "\nfewest losses: ".blue
       Teamstat.get_min("team_losses")
     when "5"
+      puts "\nmost touchdowns: ".blue
       Teamstat.get_max("totaltd")
     when "6"
+      puts "\nfewest touchdowns: ".blue
       Teamstat.get_min("totaltd")
     when "7"
+      puts "\nmost passing touchdowns: ".blue
       Teamstat.get_max("passtd")
     when "8"
+      puts "\nmost rushing touchdowns: ".blue
       Teamstat.get_max("rushtd")
     when "9"
+      puts "\nbest pass completion percentage: ".blue
       Teamstat.get_max("passpct")
     when "10"
+      puts "\nlowest pass completion percentage: ".blue
       Teamstat.get_min("passpct")
     when "11"
+      puts "\nmost passing yards: ".blue
       Teamstat.get_max("passnetyards")
     when "12"
+      puts "\nmost rushing yards: ".blue
       Teamstat.get_max("rushyards")
     when "13"
+      puts "\nmost receptions: ".blue
       Teamstat.get_max("receptions")
     when "14"
+      puts "\nmost interceptions: ".blue
       Teamstat.get_max("interceptions")
     when "15"
+      puts "\nfewest intercptions: ".blue
       Teamstat.get_min("interceptions")
     when "16"
+      puts "\nmost fumbles: ".blue
       Teamstat.get_max("fumbles")
     when "17"
+      puts "\nfewest fumbles: ".blue
       Teamstat.get_min("fumbles")
     when "18"
+      puts "\nhighest field goal percentage: ".blue
       Teamstat.get_max("fgpct")
     when "19"
+      puts "\nlowest field goal percentage: ".blue
       Teamstat.get_min("fgpct")
     when "20"
       run
@@ -189,6 +236,7 @@ class CommandLineInterface
       puts "Bad input!".red
       show_trivia
     end
+    show_trivia
   end
 
   #RUN

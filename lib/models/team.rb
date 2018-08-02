@@ -16,25 +16,25 @@ class Team < ActiveRecord::Base
     team_names = teams.map do |team|
       team.name
     end
-    puts "The teams in this division are: #{team_names}"
+    puts "\nThe teams in this division are: #{team_names*", "}".cyan
   end
 
-  def find_players
-    self.players
-  end
+  # def find_players
+  #   self.players
+  # end
 
   def show_players
     player_names = self.find_players
     player_names = players.map do |player|
       player.name
     end
-    puts "The players on this team are: #{player_names}"
+    puts "\nThe players on this team are: #{player_names*", "}".cyan
   end
 
   def show_stats_from_team_name
     team_instance = Team.find_team(self.name)
     teamstat = Teamstat.find_by team_id: team_instance.team_id
-    puts "The stats for this team are wins: #{teamstat.team_wins} and losses: #{teamstat.team_losses}"
+    puts "\nThe stats for this team are wins: #{teamstat.team_wins} and losses: #{teamstat.team_losses}".cyan
   end
 
 end

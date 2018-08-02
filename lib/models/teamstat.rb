@@ -6,7 +6,7 @@ class Teamstat < ActiveRecord::Base
     teamstat_max = Teamstat.find_by string.to_sym => max
     id = teamstat_max.team_id
     team_max = Team.find(id)
-    puts team_max.name
+    puts "\n" + team_max.name.cyan
   end
 
 end

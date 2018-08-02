@@ -1,45 +1,58 @@
 require 'pry'
+require 'colorize'
 
 class CommandLineInterface
   def greet
-    puts "Welcome to NFL Stats Finder."
+    puts "Welcome to NFL Stats Finder.".cyan
   end
 
   #general get user input method
   def gets_user_input(string)
-    puts string
+    puts string.cyan
     gets.chomp
+  end
+
+  #ensures input is included in Divison or Team
+  def check_user_input(string)
+    Division.all.map {|d| d.name}.include?(string) || Team.all.map {|t| t.name}.include?(string)
   end
 
   #(1) divisions
   def show_teams_from_division_input
-    u_division = gets_user_input("Enter the division (AFC or NFC)")
-    r_division = Division.find_division(u_division)
-    r_teams = Team.find_teams_by_divison(r_division)
-    Team.show_teams(r_teams)
-  end
-
-  #(1) divisions and (2)team
-  def show_players_or_stats_from_team_name
-    team_name = gets_user_input("Enter a team name")
-    team = Team.find_team(team_name)
-    player_or_stats = gets_user_input("Are you interested in players (1) or stats (2)?")
-    case player_or_stats
-    when "1"
-      team.show_players
-    when "2"
-      team.show_stats_from_team_name
+    u_division = gets_user_input("\nEnter the division (AFC or NFC)")
+    if !check_user_input(u_division)
+      puts "Bad input!".red
+      show_teams_from_division_input
     else
-      puts "Bad input."
-      show_players_or_stats_from_team_name
+      r_division = Division.find_division(u_division)
+      r_teams = Team.find_teams_by_divison(r_division)
+      Team.show_teams(r_teams)
     end
   end
 
+  #(1) divisions and (2) team
+  def show_players_or_stats_from_team_name
+    team_name = gets_user_input("\nEnter a team name")
+    if !check_user_input(team_name)
+      puts "Bad input!".red
+      show_players_or_stats_from_team_name
+    else
+      team = Team.find_team(team_name)
+      player_or_stats = gets_user_input("\nAre you interested in:\n\n (1) players\n (2) stats")
+      case player_or_stats
+      when "1"
+        team.show_players
+      when "2"
+        team.show_stats_from_team_name
+      else
+        puts "Bad input!".red
+        show_players_or_stats_from_team_name
+      end
+    end
+  end
 
   def show_trivia
-    input = gets_user_input("Select a piece of trivia:\n
-      (1) team with the most wins\n
-      (2) team with the most losses\n")
+    input = gets_user_input("\nSelect a piece of trivia:\n\n (1) team with the most wins\n (2) team with the most losses")
     case input
     #(1) wins
     when "1"
@@ -47,21 +60,16 @@ class CommandLineInterface
     #(2) losses
     when "2"
       Teamstat.get_max("team_losses")
+    else
+      puts "Bad input!".red
+      show_trivia
     end
   end
-
-  # def get_max(string)
-  #   max = Teamstat.maximum(string)
-  #   teamstat_max = Teamstat.find_by string.to_sym => max
-  #   id = teamstat_max.team_id
-  #   team_max = Team.find(id)
-  #   puts team_max.name
-  # end
 
   #RUN
   def run
     greet
-    input = gets_user_input("Are you interested in a division (1) or a team (2) or trivia (3)?")
+    input = gets_user_input("\nAre you interested in:\n\n (1) division\n (2) team\n (3) trivia")
     case input
     #(1) division
     when "1"
@@ -72,11 +80,9 @@ class CommandLineInterface
       show_players_or_stats_from_team_name
     #(3) stats
     when "3"
-      # team_name = gets_user_input("Enter a team name")
-      # show_stats_from_team_name(team_name)
       show_trivia
     else
-      puts "Bad input."
+      puts "Bad input!".red
       run
     end
   end

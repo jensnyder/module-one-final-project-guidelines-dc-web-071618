@@ -71,5 +71,18 @@ teamStatsTotals_array = teams_from_api_parsed["teamStatsTotals"]
 
 #create teamstat object
 teamStatsTotals_array.each do |t|
-  Teamstat.create(team_id: t["team"]["abbreviation"], team_wins: t["stats"]["standings"]["Wins"], team_losses: t["stats"]["standings"]["Losses"])
+  Teamstat.create(team_id: t["team"]["abbreviation"],
+    team_wins: t["stats"]["standings"]["Wins"],
+    team_losses: t["stats"]["standings"]["Losses"],
+    passpct: t["stats"]["passing"]["passPct"],
+    passnetyards: t["stats"]["passing"]["passNetYards"],
+    passtd: t["stats"]["passing"]["passTD"],
+    rushyards: t["stats"]["rushing"]["rushYards"],
+    rushtd: t["stats"]["rushing"]["rushTD"],
+    receptions: t["stats"]["receiving"]["receptions"],
+    interceptions: t["stats"]["interceptions"]["interceptions"],
+    fumbles: t["stats"]["fumbles"]["fumbles"],
+    fgpct: t["stats"]["fieldGoals"]["fgPct"],
+    totaltd: t["stats"]["miscellaneous"]["totalTD"],
+   )
 end

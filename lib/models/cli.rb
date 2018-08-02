@@ -52,18 +52,69 @@ class CommandLineInterface
   end
 
   def show_trivia
-    input = gets_user_input("\nSelect a piece of trivia:\n\n (1) team with the most wins\n (2) team with the most losses")
+    input = gets_user_input("\nSelect a piece of trivia for the 2017 season.
+      Which team had the:
+      (1) most wins?
+      (2) fewest wins?
+      (3) most losses?
+      (4) fewest losses?
+      (5) most touchdowns?
+      (6) fewest touchdowns?
+      (7) most passing touchdowns?
+      (8) most rushing touchdowns?
+      (9) best pass completion percentage?
+      (10) worst pass completion percentage?
+      (11) most passing yards?
+      (12) most rushing yards?
+      (13) most receptions?
+      (14) most interceptions?
+      (15) fewest inteceptions?
+      (16) most fumbles?
+      (17) fewest fumbles?
+      (18) highest field goal percentage?
+      (19) lowest field goal percentage?
+    ")
     case input
-    #(1) wins
     when "1"
       Teamstat.get_max("team_wins")
-    #(2) losses
     when "2"
+      Teamstat.get_min("team_wins")
+    when "3"
       Teamstat.get_max("team_losses")
-    else
-      puts "Bad input!".red
-      show_trivia
+    when "4"
+      Teamstat.get_min("team_losses")
+    when "5"
+      Teamstat.get_max("totaltd")
+    when "6"
+      Teamstat.get_min("totaltd")
+    when "7"
+      Teamstat.get_max("passtd")
+    when "8"
+      Teamstat.get_max("rushtd")
+    when "9"
+      Teamstat.get_max("passpct")
+    when "10"
+      Teamstat.get_min("passpct")
+    when "11"
+      Teamstat.get_max("passnetyards")
+    when "12"
+      Teamstat.get_max("rushyards")
+    when "13"
+      Teamstat.get_max("receptions")
+    when "14"
+      Teamstat.get_max("interceptions")
+    when "15"
+      Teamstat.get_min("interceptions")
+    when "16"
+      Teamstat.get_max("fumbles")
+    when "17"
+      Teamstat.get_min("fumbles")
+    when "18"
+      Teamstat.get_max("fgpct")
+    when "19"
+      Teamstat.get_min("fgpct")
     end
+    show_trivia
   end
 
   #RUN

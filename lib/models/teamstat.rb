@@ -6,7 +6,15 @@ class Teamstat < ActiveRecord::Base
     teamstat_max = Teamstat.find_by string.to_sym => max
     id = teamstat_max.team_id
     team_max = Team.find(id)
-    puts "\n" + team_max.name.cyan
+    puts "\nThe #{team_max.name} (#{max})".cyan
+  end
+
+  def self.get_min(string)
+    min = Teamstat.minimum(string)
+    teamstat_min = Teamstat.find_by string.to_sym => min
+    id = teamstat_min.team_id
+    team_min = Team.find(id)
+    puts "\nThe #{team_min.name} (#{min})".cyan
   end
 
 end

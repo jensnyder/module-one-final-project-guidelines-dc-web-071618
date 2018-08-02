@@ -17,19 +17,6 @@ class CommandLineInterface
     Division.all.map {|d| d.name}.include?(string) || Team.all.map {|t| t.name}.include?(string)
   end
 
-  #(1) divisions
-  def show_teams_from_division_input
-    u_division = gets_user_input("\nEnter the division (AFC or NFC)")
-    if !check_user_input(u_division)
-      puts "Bad input!".red
-      show_teams_from_division_input
-    else
-      r_division = Division.find_division(u_division)
-      r_teams = Team.find_teams_by_divison(r_division)
-      Team.show_teams(r_teams)
-    end
-  end
-
   #gets team from user input, checks if valid, finds team
   def get_team_from_user_input
     team_name = gets_user_input("\nEnter a team name")
@@ -39,6 +26,59 @@ class CommandLineInterface
     else
       team = Team.find_team(team_name)
     end
+  end
+
+  #gives division options: teams or stats
+  def show_teams_or_stats_from_division_input
+    u_division = gets_user_input("\nEnter the division (AFC or NFC)")
+    if !check_user_input(u_division)
+      puts "Bad input!".red
+      show_teams_or_stats_from_division_name
+    else
+      r_division = Division.find_division(u_division)
+      team_or_stats = gets_user_input("\nAre you interested in:\n\n (1) teams\n (2) stats\n (3) return to main menu")
+      case team_or_stats
+      when "1"
+        Team.show_teams(r_division.find_teams_in_division)
+        user_team = get_team_from_user_input
+        show_players_or_stats_from_team_name(user_team)
+      when "2"
+        show_stats_from_division_name(r_division)
+      when "3"
+        run
+      else
+        puts "Bad input!".red
+        show_teams_or_stats_from_division_input
+    end
+    show_teams_or_stats_from_division_input
+    end
+  end
+
+  #show stats given division name
+  def show_stats_from_division_name(division)
+    stat_selection = gets_user_input("\nWhich division stats would you like to see? Team in the #{division.name} with the:\n (1) most wins\n (2) most losses\n (3) most touchdowns\n (4) most passing yards\n (5) most rushing yards\n (6) most receptions\n (7) most interceptions\n (8) return to main menu")
+    case stat_selection
+    when "1"
+      puts division.get_max_team_name_of_division("team_wins")
+    when "2"
+      puts division.get_max_team_name_of_division("team_losses")
+    when "3"
+      puts division.get_max_team_name_of_division("totaltd")
+    when "4"
+      puts division.get_max_team_name_of_division("passnetyards")
+    when "5"
+      puts division.get_max_team_name_of_division("rushyards")
+    when "6"
+      puts division.get_max_team_name_of_division("receptions")
+    when "7"
+      puts division.get_max_team_name_of_division("interceptions")
+    when "8"
+      run
+    else
+      puts "Bad input!".red
+      show_stats_from_division_name(division)
+    end
+    show_stats_from_division_name(division)
   end
 
   #gives team options: players or stats
@@ -157,9 +197,9 @@ class CommandLineInterface
     case input
     #(1) division
     when "1"
-      show_teams_from_division_input
-      user_team = get_team_from_user_input
-      show_players_or_stats_from_team_name(user_team)
+      show_teams_or_stats_from_division_input
+      # user_team = get_team_from_user_input
+      # show_players_or_stats_from_team_name(user_team)
     #(2) teams
     when "2"
       Team.show_teams(Team.all)

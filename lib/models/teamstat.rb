@@ -17,4 +17,8 @@ class Teamstat < ActiveRecord::Base
     puts "\nThe #{team_min.name} (#{min})".blue
   end
 
+  def self.order_teamstats_by(string)
+    Teamstat.order(string)
+  end
+
 end

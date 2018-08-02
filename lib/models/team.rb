@@ -31,4 +31,9 @@ class Team < ActiveRecord::Base
     puts "\nThe players on this team are: #{player_names*", "}".blue
   end
 
+  def get_teamstat_of_team
+    Teamstat.find_by team_id: team_id
+  end
+
+
 end

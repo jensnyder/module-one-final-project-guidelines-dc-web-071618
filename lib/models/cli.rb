@@ -14,34 +14,27 @@ class CommandLineInterface
   #(1) divisions
   def show_teams_from_division_input
     u_division = gets_user_input("Enter the division (AFC or NFC)")
-    r_division = find_division(u_division)
-    r_teams = find_teams_by_divison(r_division)
-    show_teams(r_teams)
+    r_division = Division.find_division(u_division)
+    r_teams = Team.find_teams_by_divison(r_division)
+    Team.show_teams(r_teams)
   end
 
   #(1) divisions and (2)team
   def show_players_or_stats_from_team_name
     team_name = gets_user_input("Enter a team name")
+    team = Team.find_team(team_name)
     player_or_stats = gets_user_input("Are you interested in players (1) or stats (2)?")
     case player_or_stats
     when "1"
-      team = find_team(team_name)
-      players = find_players(team)
-      show_players(players)
+      team.show_players
     when "2"
-      show_stats_from_team_name(team_name)
+      team.show_stats_from_team_name
     else
       puts "Bad input."
       show_players_or_stats_from_team_name
     end
   end
 
-  #(3) trivia --> stats
-  def show_stats_from_team_name(team)
-    team_instance = find_team(team)
-    teamstat = Teamstat.find_by team_id: team_instance.team_id
-    puts "The stats for this team are wins: #{teamstat.team_wins} and losses: #{teamstat.team_losses}"
-  end
 
   def show_trivia
     input = gets_user_input("Select a piece of trivia:\n
@@ -50,20 +43,20 @@ class CommandLineInterface
     case input
     #(1) wins
     when "1"
-      get_max("team_wins")
+      Teamstat.get_max("team_wins")
     #(2) losses
     when "2"
-      get_max("team_losses")
+      Teamstat.get_max("team_losses")
     end
   end
 
-  def get_max(string)
-    max = Teamstat.maximum(string)
-    teamstat_max = Teamstat.find_by string.to_sym => max
-    id = teamstat_max.team_id
-    team_max = Team.find(id)
-    puts team_max.name
-  end
+  # def get_max(string)
+  #   max = Teamstat.maximum(string)
+  #   teamstat_max = Teamstat.find_by string.to_sym => max
+  #   id = teamstat_max.team_id
+  #   team_max = Team.find(id)
+  #   puts team_max.name
+  # end
 
   #RUN
   def run
@@ -86,38 +79,6 @@ class CommandLineInterface
       puts "Bad input."
       run
     end
-  end
-
-  #HELPER METHODS
-
-  def find_division(division)
-    Division.find_by(name: division)
-  end
-
-  def find_team(team)
-    Team.find_by(name: team)
-  end
-
-  def find_teams_by_divison(division)
-    Team.where("division_id = ?", division.id)
-  end
-
-  def show_teams(teams)
-    team_names = teams.map do |team|
-      team.name
-    end
-    puts "The teams in this division are: #{team_names}"
-  end
-
-  def find_players(team)
-    team.players
-  end
-
-  def show_players(players)
-    player_names = players.map do |player|
-      player.name
-    end
-    puts "The players on this team are: #{player_names}"
   end
 
 end

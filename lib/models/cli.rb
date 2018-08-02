@@ -3,7 +3,7 @@ require 'colorize'
 
 class CommandLineInterface
   def greet
-    puts "Welcome to NFL Stats Finder.".cyan
+    puts "Welcome to NFL Stats Finder.".cyan.bold
   end
 
   #general get user input method
@@ -30,25 +30,54 @@ class CommandLineInterface
     end
   end
 
-  #(1) divisions and (2) team
-  def show_players_or_stats_from_team_name
+  #gets team from user input, checks if valid, finds team
+  def get_team_from_user_input
     team_name = gets_user_input("\nEnter a team name")
     if !check_user_input(team_name)
       puts "Bad input!".red
-      show_players_or_stats_from_team_name
+      get_team_from_user_input
     else
       team = Team.find_team(team_name)
-      player_or_stats = gets_user_input("\nAre you interested in:\n\n (1) players\n (2) stats")
+    end
+  end
+
+  #gives team options: players or stats
+  def show_players_or_stats_from_team_name(team)
+      player_or_stats = gets_user_input("\nAre you interested in:\n\n (1) players\n (2) stats\n (3) return to main menu")
       case player_or_stats
       when "1"
         team.show_players
       when "2"
-        team.show_stats_from_team_name
+        show_stats_from_team_name(team)
+      when "3"
+        run
       else
         puts "Bad input!".red
-        show_players_or_stats_from_team_name
+        show_players_or_stats_from_team_name(team)
       end
+    show_players_or_stats_from_team_name(team)
+  end
+
+  #shows stats given team name
+  def show_stats_from_team_name(team)
+    stat_selection = gets_user_input("\nWhich stats would you like to see?\n (1) wins and losses\n (2) passing\n (3) rushing\n (4) scoring\n (5) return to main menu")
+    teamstat = Teamstat.find_by team_id: team.team_id
+    case stat_selection
+    when "1"
+      puts "\nThe #{team.name}\n wins: #{teamstat.team_wins}\n losses: #{teamstat.team_losses}".blue
+    when "2"
+      puts "\nThe #{team.name}\n pass completion percentage: #{teamstat.passpct}\n passing yards: #{teamstat.passnetyards}\n passing touchdowns: #{teamstat.passtd}\n interceptions: #{teamstat.interceptions}\n receptions: #{teamstat.receptions}".blue
+    when "3"
+      puts "\nThe #{team.name}\n rushing yards: #{teamstat.rushyards}\n rushing touchdowns: #{teamstat.rushtd}\n fumbles: #{teamstat.fumbles}".blue
+    when "4"
+      puts "\nThe #{team.name}\n total touchdowns: #{teamstat.totaltd}\n rushing touchdowns: #{teamstat.rushtd}\n passing touchdowns: #{teamstat.passtd}\n field goal percentage: #{teamstat.fgpct}".blue
+    when "5"
+      run
+    else
+      puts "Bad input!".red
+      show_stats_from_team_name(team)
     end
+    show_stats_from_team_name(team)
   end
 
   def show_trivia
@@ -73,6 +102,7 @@ class CommandLineInterface
       (17) fewest fumbles?
       (18) highest field goal percentage?
       (19) lowest field goal percentage?
+      (20) return to main menu
     ")
     case input
     when "1"
@@ -113,29 +143,39 @@ class CommandLineInterface
       Teamstat.get_max("fgpct")
     when "19"
       Teamstat.get_min("fgpct")
+    when "20"
+      run
+    else
+      puts "Bad input!".red
+      show_trivia
     end
-    show_trivia
   end
 
   #RUN
   def run
-    greet
-    input = gets_user_input("\nAre you interested in:\n\n (1) division\n (2) team\n (3) trivia")
+    input = gets_user_input("\nAre you interested in:\n\n (1) division\n (2) team\n (3) trivia\n (4) exit")
     case input
     #(1) division
     when "1"
       show_teams_from_division_input
-      show_players_or_stats_from_team_name
+      user_team = get_team_from_user_input
+      show_players_or_stats_from_team_name(user_team)
     #(2) teams
     when "2"
-      show_players_or_stats_from_team_name
+      Team.show_teams(Team.all)
+      user_team = get_team_from_user_input
+      show_players_or_stats_from_team_name(user_team)
     #(3) stats
     when "3"
       show_trivia
+    when "4"
+      puts "\nThanks! Now exiting.\n".blue
+      exit
     else
       puts "Bad input!".red
       run
     end
+    run
   end
 
 end

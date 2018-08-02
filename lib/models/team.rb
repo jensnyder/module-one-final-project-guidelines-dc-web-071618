@@ -16,7 +16,7 @@ class Team < ActiveRecord::Base
     team_names = teams.map do |team|
       team.name
     end
-    puts "\nThe teams in this division are: #{team_names*", "}".cyan
+    puts "\nTeams: #{team_names*", "}".blue
   end
 
   def find_players
@@ -28,13 +28,7 @@ class Team < ActiveRecord::Base
     player_names = players.map do |player|
       player.name
     end
-    puts "\nThe players on this team are: #{player_names*", "}".cyan
-  end
-
-  def show_stats_from_team_name
-    team_instance = Team.find_team(self.name)
-    teamstat = Teamstat.find_by team_id: team_instance.team_id
-    puts "\nThe stats for this team are wins: #{teamstat.team_wins} and losses: #{teamstat.team_losses}".cyan
+    puts "\nThe players on this team are: #{player_names*", "}".blue
   end
 
 end

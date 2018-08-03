@@ -42,7 +42,7 @@ class CommandLineInterface
     u_division = gets_user_input("\nEnter a division (AFC or NFC).").upcase
     if !check_user_input(u_division)
       puts "Bad input!".red
-      show_teams_or_stats_from_division_name
+      show_teams_or_stats_from_division_input
     else
       r_division = Division.find_division(u_division)
       puts "\nNow viewing the #{r_division.name}".blue

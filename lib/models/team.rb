@@ -28,7 +28,7 @@ class Team < ActiveRecord::Base
     player_names = players.map do |player|
       player.name
     end
-    puts "\nThe players on this team are: #{player_names*", "}".blue
+    puts "\nThe players on the #{self.name} are: #{player_names*", "}".blue
   end
 
   def get_teamstat_of_team

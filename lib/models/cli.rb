@@ -3,6 +3,7 @@ require 'colorize'
 
 class CommandLineInterface
   def greet
+    puts "\e[H\e[2J"
     puts "Welcome to NFL Stats Finder.".cyan.bold
   end
 
@@ -14,37 +15,46 @@ class CommandLineInterface
 
   #ensures input is included in Divison or Team
   def check_user_input(string)
-    Division.all.map {|d| d.name}.include?(string) || Team.all.map {|t| t.name}.include?(string)
+    Division.all.map {|d| d.name}.include?(string.upcase) || Team.all.map {|t| t.name}.include?(string.capitalize)
   end
 
   #gets team from user input, checks if valid, finds team
   def get_team_from_user_input
-    team_name = gets_user_input("\nEnter a team name")
+    team_name = gets_user_input("\nEnter a team name.")
     if !check_user_input(team_name)
       puts "Bad input!".red
       get_team_from_user_input
     else
-      team = Team.find_team(team_name)
+      team = Team.find_team(team_name.capitalize)
     end
+  end
+
+  #takes team from get_team_from_user_input and shows players or stats
+  def show_players_or_stats_from_team_input
+    user_team = get_team_from_user_input
+    puts "\e[H\e[2J"
+    puts "\nNow viewing the #{user_team.city} #{user_team.name}".blue
+    show_players_or_stats_from_team_name(user_team)
   end
 
   #gives division options: teams or stats
   def show_teams_or_stats_from_division_input
-    u_division = gets_user_input("\nEnter the division (AFC or NFC)")
+    u_division = gets_user_input("\nEnter a division (AFC or NFC).").upcase
     if !check_user_input(u_division)
       puts "Bad input!".red
       show_teams_or_stats_from_division_name
     else
       r_division = Division.find_division(u_division)
-      team_or_stats = gets_user_input("\nAre you interested in:\n\n (1) teams\n (2) stats\n (3) return to main menu")
+      puts "\nNow viewing the #{r_division.name}".blue
+      team_or_stats = gets_user_input("\nWhat would you like to see?\n\n (1) #{r_division.name} teams\n (2) #{r_division.name} stats\n (3) Return to main menu")
       case team_or_stats
       when "1"
         Team.show_teams(r_division.find_teams_in_division)
-        user_team = get_team_from_user_input
-        show_players_or_stats_from_team_name(user_team)
+        show_players_or_stats_from_team_input
       when "2"
         show_stats_from_division_name(r_division)
       when "3"
+        puts "\e[H\e[2J"
         run
       else
         puts "Bad input!".red
@@ -56,7 +66,7 @@ class CommandLineInterface
 
   #show stats given division name
   def show_stats_from_division_name(division)
-    stat_selection = gets_user_input("\nWhich division stats would you like to see? Team in the #{division.name} with the:\n (1) most wins\n (2) most losses\n (3) most touchdowns\n (4) most passing yards\n (5) most rushing yards\n (6) most receptions\n (7) most interceptions\n (8) fewest wins\n (9) fewest losses\n (10) fewest touchdowns\n (11) fewest passing yards\n (12) fewest rushing yards\n (13) fewest receptions\n (14) fewest interceptions\n (15) return to main menu")
+    stat_selection = gets_user_input("\nWhich division stats would you like to see? Team in the #{division.name} with the:\n (1) most wins\n (2) most losses\n (3) most touchdowns\n (4) most passing yards\n (5) most rushing yards\n (6) most receptions\n (7) most interceptions\n (8) fewest wins\n (9) fewest losses\n (10) fewest touchdowns\n (11) fewest passing yards\n (12) fewest rushing yards\n (13) fewest receptions\n (14) fewest interceptions\n (15) Return to main menu")
     case stat_selection
     when "1"
       puts "\nmost wins: ".blue
@@ -101,6 +111,7 @@ class CommandLineInterface
       puts "\nfewest interceptions: ".blue
       puts division.get_min_team_name_of_division("interceptions")
     when "15"
+      puts "\e[H\e[2J"
       run
     else
       puts "Bad input!".red
@@ -111,13 +122,14 @@ class CommandLineInterface
 
   #gives team options: players or stats
   def show_players_or_stats_from_team_name(team)
-      player_or_stats = gets_user_input("\nAre you interested in:\n\n (1) players\n (2) stats\n (3) return to main menu")
+      player_or_stats = gets_user_input("\nAre you interested in:\n\n (1) #{team.name} players\n (2) #{team.name} stats\n (3) Return to main menu")
       case player_or_stats
       when "1"
         team.show_players
       when "2"
         show_stats_from_team_name(team)
       when "3"
+        puts "\e[H\e[2J"
         run
       else
         puts "Bad input!".red
@@ -128,7 +140,7 @@ class CommandLineInterface
 
   #shows stats given team name
   def show_stats_from_team_name(team)
-    stat_selection = gets_user_input("\nWhich stats would you like to see?\n (1) wins and losses\n (2) passing\n (3) rushing\n (4) scoring\n (5) return to main menu")
+    stat_selection = gets_user_input("\nWhich #{team.name} stats would you like to see?\n (1) Wins and losses\n (2) Passing\n (3) Rushing\n (4) Scoring\n (5) Return to main menu")
     teamstat = Teamstat.find_by team_id: team.team_id
     case stat_selection
     when "1"
@@ -140,6 +152,7 @@ class CommandLineInterface
     when "4"
       puts "\nThe #{team.name}\n total touchdowns: #{teamstat.totaltd}\n rushing touchdowns: #{teamstat.rushtd}\n passing touchdowns: #{teamstat.passtd}\n field goal percentage: #{teamstat.fgpct}".blue
     when "5"
+      puts "\e[H\e[2J"
       run
     else
       puts "Bad input!".red
@@ -170,7 +183,7 @@ class CommandLineInterface
       (17) fewest fumbles?
       (18) highest field goal percentage?
       (19) lowest field goal percentage?
-      (20) return to main menu
+      (20) Return to main menu
     ")
     case input
     when "1"
@@ -231,6 +244,7 @@ class CommandLineInterface
       puts "\nlowest field goal percentage: ".blue
       Teamstat.get_min("fgpct")
     when "20"
+      puts "\e[H\e[2J"
       run
     else
       puts "Bad input!".red
@@ -241,22 +255,23 @@ class CommandLineInterface
 
   #RUN
   def run
-    input = gets_user_input("\nAre you interested in:\n\n (1) division\n (2) team\n (3) trivia\n (4) exit")
+    input = gets_user_input("\nWhat are you interested in?\n\n (1) Division\n (2) Team\n (3) Trivia\n (4) Exit")
     case input
     #(1) division
     when "1"
+      puts "\e[H\e[2J"
       show_teams_or_stats_from_division_input
-      # user_team = get_team_from_user_input
-      # show_players_or_stats_from_team_name(user_team)
-    #(2) teams
+    #(2) team
     when "2"
+      puts "\e[H\e[2J"
       Team.show_teams(Team.all)
-      user_team = get_team_from_user_input
-      show_players_or_stats_from_team_name(user_team)
-    #(3) stats
+      show_players_or_stats_from_team_input
+    #(3) trivia
     when "3"
+      puts "\e[H\e[2J"
       show_trivia
     when "4"
+      puts "\e[H\e[2J"
       puts "\nThanks! Now exiting.\n".blue
       exit
     else

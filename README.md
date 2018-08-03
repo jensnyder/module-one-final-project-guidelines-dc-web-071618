@@ -3,6 +3,7 @@ This project allows users to view information about NFL teams. The user has the 
 
 ## Install Instructions
 -[Ruby](https://www.ruby-lang.org/en/documentation/installation/)
+
 -[Bundler for Ruby](https://bundler.io/), a dependency manager
 
 To use NFL Stats finder, you will need the following gems:
@@ -21,11 +22,16 @@ Once the CLI appears, follow the on-screen instructions to access the informatio
 
 ## Contributors Guide
 To contribute to the NFL Stats Finder:
--Fork it
--Create your feature branch (git checkout -b my-new-feature)
--Commit your changes (git commit -am 'Add some feature')
--Push to the branch (git push origin my-new-feature)
--Create a new Pull Request
+
+- Fork it
+
+- Create your feature branch (git checkout -b my-new-feature)
+
+- Commit your changes (git commit -am 'Add some feature')
+
+- Push to the branch (git push origin my-new-feature)
+
+- Create a new Pull Request
 
 ## Authors
 [Molly Seither](https://github.com/mollyseith)
